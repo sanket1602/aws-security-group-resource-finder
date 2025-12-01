@@ -1,6 +1,7 @@
 #!/bin/bash
-VPC_ID="vpc-xxxxxxxxxxx"  # use your vpc ID here
+VPC_ID="vpc-xxxxxxxxxxx"        # use your vpc ID here
 REGION="us-east-2"              # your region
+
 # Get all security groups (ID and Name) in the VPC
 SG_INFO=$(aws ec2 describe-security-groups \
   --region $REGION \
@@ -12,6 +13,7 @@ SG_INFO=$(aws ec2 describe-security-groups \
 while read -r SG_ID SG_NAME; do
   echo "Security Group: $SG_NAME ($SG_ID)"
   echo "------------------------------------------------"
+  
   # EC2 Instances
   INSTANCES=$(aws ec2 describe-instances \
     --region $REGION \
@@ -26,8 +28,9 @@ while read -r SG_ID SG_NAME; do
     echo " No EC2 instances using this SG."
   fi
   echo ""
+  
   # Lets loop through ENIs
-  echo "finding any security groups attached to ENIs (Later you need to check the ENI whehter its used or not)"
+  echo "Finding any security groups attached to ENIs (Later you need to check the ENI whehter its used or not)"
   ENIS=$(aws ec2 describe-network-interfaces \
     --region $REGION \
     --filters Name=group-id,Values=$SG_ID \
@@ -41,6 +44,7 @@ while read -r SG_ID SG_NAME; do
     echo " No ENIs using this SG."
   fi
   echo ""
+  
   # Now Application Load Balancers (ALB/NLB)
   echo "Identifying Application Load Balancers associated with any Security Groups in the VPC."
   ALBS=$(aws elbv2 describe-load-balancers \
@@ -54,6 +58,7 @@ while read -r SG_ID SG_NAME; do
   else
     echo "No ALBs/NLBs using this SG."
   fi
+  
   # Now Classic ELB
   echo "Now the Classic load balancer"
   ELBS=$(aws elb describe-load-balancers \
@@ -66,8 +71,9 @@ while read -r SG_ID SG_NAME; do
     echo "$ELBS"
   fi
   echo ""
-  # lets loop through RDS Instances
-  echo "finding which security groups attached to RDS instances"
+  
+  # Lets loop through RDS Instances
+  echo "Finding which security groups attached to RDS instances"
   RDS_INSTANCES=$(aws rds describe-db-instances \
     --region $REGION \
     --query "DBInstances[?VpcSecurityGroups[?VpcSecurityGroupId=='$SG_ID']].[DBInstanceIdentifier,DBInstanceStatus,Engine]" \
