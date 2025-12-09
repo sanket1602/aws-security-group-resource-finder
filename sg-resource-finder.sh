@@ -1,6 +1,6 @@
 #!/bin/bash
 VPC_ID="vpc-xxxxxxxxxxx"        # use your vpc ID here
-REGION="us-east-2"              # your region
+REGION="us-west-2"              # your region
 
 # Get all security groups (ID and Name) in the VPC
 SG_INFO=$(aws ec2 describe-security-groups \
@@ -21,7 +21,7 @@ while read -r SG_ID SG_NAME; do
     --query "Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key=='Name']|[0].Value]" \
     --output text)
   if [[ -n "$INSTANCES" ]]; then
-    echo "  EC2 instances:"
+    echo "  EC2 Instances:"
     printf "%-20s %-15s %-10s %-20s\n" "Instance ID" "Private IP" "State" "Name Tag"
     echo "$INSTANCES"
   else
