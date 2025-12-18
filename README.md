@@ -6,3 +6,11 @@ Currently, the script identifies associations with EC2 instances, ENIs, RDS inst
 
 In order to make use of the script please make sure you have aws-cli configured.
 More about aws-cli can be found here = https://aws.amazon.com/cli/ 
+
+
+
+Using the script
+
+````
+sh sg-resource-finder.sh
+````
