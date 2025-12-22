@@ -9,8 +9,16 @@ More about aws-cli can be found here = https://aws.amazon.com/cli/
 
 
 
-Using the script
+# Using the script
+<br/>
 
+**Make the script executable**
+````
+chmod +x sg-resource-finder.sh
+````
+<br/>
+
+**Run the script**
 ````
 sh sg-resource-finder.sh
 ````
